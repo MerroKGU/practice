@@ -1,17 +1,17 @@
 /**
 *	# Contents
-*		- opencv—ûKƒvƒƒOƒ‰ƒ€1 
-*			+ Šç”F¯
-*		- Source.cpp
+*		- opencvç·´ç¿’ãƒ—ãƒ­ã‚°ãƒ©ãƒ 1 
+*			+ é¡”èªè­˜
+*		- face_tracking.cpp
 *	# Author
 *		- Mitsuhiro Mizuno
 *	# LastUpdate
 *		- 2016/7/23 Ver.1
 *	# Since
 *		- 2016/7/23	ver.1
-*	# reference@
+*	# referenceã€€
 *		- http://ishidate.my.coocan.jp/opencv_13/opencv_13.htm
-*		- opencv‚É‚æ‚é‰æ‘œˆ—“ü–å u’kĞ(ISBN 978-4-06-153822-1)
+*		- opencvã«ã‚ˆã‚‹ç”»åƒå‡¦ç†å…¥é–€ è¬›è«‡ç¤¾(ISBN 978-4-06-153822-1)
 *	   
 **/
 
@@ -25,49 +25,49 @@ using namespace cv;
 
 string win_src = "src";
 string win_dst = "dst";
-string target = "haarcascade_frontalface_alt.xml";	// ŠwKÏ‚İƒtƒ@ƒCƒ‹
+string target = "haarcascade_frontalface_alt.xml";	// å­¦ç¿’æ¸ˆã¿ãƒ•ã‚¡ã‚¤ãƒ«
 
 int main(int argc, char **argv) {
-	Mat img_src; // æ“¾‰æ‘œ
-	Mat img_dst; // o—Í‰æ‘œ
+	Mat img_src; // å–å¾—ç”»åƒ
+	Mat img_dst; // å‡ºåŠ›ç”»åƒ
 
-	// ƒJƒƒ‰ƒI[ƒvƒ“  (ˆø”‚ÅƒJƒƒ‰”Ô†w’èj
+	// ã‚«ãƒ¡ãƒ©ã‚ªãƒ¼ãƒ—ãƒ³  (å¼•æ•°ã§ã‚«ãƒ¡ãƒ©ç•ªå·æŒ‡å®šï¼‰
 	VideoCapture capture(0);
 	
-	// ƒJƒƒ‰‚ğŠJ‚¯‚È‚¢‚Æ‚«ƒGƒ‰[I—¹
+	// ã‚«ãƒ¡ãƒ©ã‚’é–‹ã‘ãªã„ã¨ãã‚¨ãƒ©ãƒ¼çµ‚äº†
 	if (!capture.isOpened()) {
 		cout << "camera error" << endl;
 		return -1;
 	}
 
-	// •\¦ƒEƒBƒ“ƒhƒEì¬
-	//namedWindow(win_src	, CV_WINDOW_AUTOSIZE);// æ“¾‰æ‘œ
-	namedWindow(win_dst, CV_WINDOW_AUTOSIZE); // o—Í‰æ‘œ
+	// è¡¨ç¤ºã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ
+	//namedWindow(win_src	, CV_WINDOW_AUTOSIZE);// å–å¾—ç”»åƒ
+	namedWindow(win_dst, CV_WINDOW_AUTOSIZE); // å‡ºåŠ›ç”»åƒ
 
 	while (1) {
-		capture >> img_src; // ƒJƒƒ‰‰f‘œ‚Ì“Ç‚İ‚İ
+		capture >> img_src; // ã‚«ãƒ¡ãƒ©æ˜ åƒã®èª­ã¿è¾¼ã¿
 		
-		/* ‚±‚±‚ÌŠj‚Æ‚È‚éˆ—‚ğ‹Lq‚·‚é */
-		// ‰æ‘œ‚ÌƒOƒŒ[‰»
+		/* ã“ã“ã®æ ¸ã¨ãªã‚‹å‡¦ç†ã‚’è¨˜è¿°ã™ã‚‹ */
+		// ç”»åƒã®ã‚°ãƒ¬ãƒ¼åŒ–
 		Mat gray_img;
 		cvtColor(img_src, gray_img, CV_BGR2GRAY);
 		
-		// cascade‚ÅŠçŒŸo
+		// cascadeã§é¡”æ¤œå‡º
 		vector<Rect>faces;
-		CascadeClassifier cascade(target); // ŠwKÏ‚İƒtƒ@ƒCƒ‹‚Ì“Ç‚İæ‚èiÀsêŠ‚É”z’uj
+		CascadeClassifier cascade(target); // å­¦ç¿’æ¸ˆã¿ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿å–ã‚Šï¼ˆå®Ÿè¡Œå ´æ‰€ã«é…ç½®ï¼‰
 		cascade.detectMultiScale(gray_img, faces, 1.1, 2, 2);
 		
-		// “ü—Í‰æ‘œ‚É˜g‚Ì•`Ê
+		// å…¥åŠ›ç”»åƒã«æ ã®æå†™
 		img_dst = img_src;
 		for (auto it = faces.begin(); it != faces.end(); ++it) {
 			rectangle(img_dst, it->tl(), it->br(), Scalar(0, 255, 255), 2, 8, 0);
 		}													
 		
-		// ƒEƒCƒ“ƒhƒE•`Ê
-		//imshow(win_src, img_src); // “ü—Í‰æ‘œ
-		imshow(win_dst, img_dst);	// o—Í‰æ‘œ
+		// ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦æå†™
+		//imshow(win_src, img_src); // å…¥åŠ›ç”»åƒ
+		imshow(win_dst, img_dst);	// å‡ºåŠ›ç”»åƒ
 
-		// 'q'ƒL[‚ÅƒvƒƒOƒ‰ƒ€‚ğI—¹
+		// 'q'ã‚­ãƒ¼ã§ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’çµ‚äº†
 		if (waitKey(1) == 'q') {
 			break;
 		}
